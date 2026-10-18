@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cult Pro Fat-Loss Planner</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#EEF1F7;--card:#fff;--ink:#1A2140;--mut:#5C6584;--ac:#3A55D6;--ac2:#C9F266;--line:#D9DEEC;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11152A;--card:#1B2140;--ink:#EEF1FF;--mut:#9AA3C7;--ac:#8EA0FF;--ac2:#C9F266;--line:#2D3562;--on:#11152A}}
+:root[data-theme="dark"]{--bg:#11152A;--card:#1B2140;--ink:#EEF1FF;--mut:#9AA3C7;--ac:#8EA0FF;--ac2:#C9F266;--line:#2D3562;--on:#11152A}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:28px;line-height:1.1;font-weight:800;margin:8px 0 4px}h2{font-size:18px;margin:20px 0 8px}
+.sub{color:var(--mut);margin:0 0 14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--ac);color:var(--on);border-radius:14px;padding:10px 12px}
+.stat b{display:block;font-size:26px;font-weight:800;line-height:1.1}.stat span{font-size:13px;opacity:.9}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px}
+.tab{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+.tab[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.card summary{list-style:none;display:flex;gap:10px;align-items:center;padding:12px;cursor:pointer}
+.card summary::-webkit-details-marker{display:none}
+.card .nm{flex:1;font-weight:600}.card .st{color:var(--mut);font-size:14px}
+.chk{width:24px;height:24px;accent-color:var(--ac)}
+.body{padding:0 14px 14px;border-top:1px solid var(--line)}
+.body ol{margin:10px 0;padding-left:20px}.body li{margin-bottom:4px}
+.tip{background:var(--ac2);color:#1A2140;border-radius:10px;padding:8px 10px;font-size:14px;margin:8px 0}
+.media img{max-width:100%;border-radius:10px;display:block;margin:8px 0}
+.btn{border:1px solid var(--ac);background:transparent;color:var(--ac);border-radius:10px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer;margin-right:6px}
+.btn.fill{background:var(--ac);color:var(--on)}.btn.big{width:100%;padding:14px;font-size:17px;margin:14px 0}
+.btn.done{background:var(--ac2);color:#1A2140;border-color:var(--ac2)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=number],input[type=date]{font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);min-width:0;flex:1}
+.dots{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.dot{aspect-ratio:1;border-radius:8px;background:var(--line);font-size:11px;color:var(--mut);display:flex;align-items:center;justify-content:center}
+.dot.on{background:var(--ac);color:var(--on)}.dot.today{outline:2px solid var(--ink)}
+.log{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.log button{border:0;background:none;color:var(--mut);cursor:pointer;font:inherit}
+svg{width:100%;height:auto;display:block}
+.mini li{margin-bottom:2px}
+</style>
+</head>
+<body>
+<main>
+<h1>Cult Pro fat-loss planner</h1>
+<p class="sub">4 days a week. No push-ups, no pull-ups. 63 kg, 164 cm.</p>
+<div class="stats" id="stats"></div>
+<div class="tabs" role="tablist" id="tabs"></div>
+<div id="view"></div>
+</main>
+<script>
+const DAYS=[
+{t:"Day 1",n:"Lower Body A: quads and glutes",cd:"L",ex:[
+["Goblet squat","3 x 10-12",["Hold one dumbbell upright at your chest, feet shoulder-width.","Sit down between your hips, keeping your chest tall.","Drive through the mid-foot to stand."],"Keep chest tall, sit down between hips, drive through mid-foot.","Dumbbell"],
+["45-degree leg press","3 x 12",["Sit back into the pad with feet hip-width in the middle of the platform.","Lower until your knees are near 90°.","Press up without locking your knees."],"Do not lock your knees at the top.","Leg press machine"],
+["Dumbbell Romanian deadlift","3 x 10-12",["Hold a dumbbell in each hand in front of your thighs.","Bend your knees slightly and push your hips straight back.","Stop at a hamstring stretch, then squeeze glutes to stand."],"Push hips straight back until hamstrings stretch.","Pair of dumbbells"],
+["Seated leg extension","3 x 12-15",["Set the pad just above your ankles.","Straighten your legs and squeeze for 1 second.","Lower slowly."],"Pause 1 second at the top to squeeze quads.","Leg extension machine"],
+["Seated hip abduction","3 x 15",["Sit upright with pads outside your knees.","Push your legs outward under control.","Return slowly without letting the weights slam."],"Control the movement outward to target outer glutes.","Abductor machine"],
+["Cardio finisher: incline walk","12-15 min",["Set the treadmill incline to 6-8%.","Walk at 4.5-5.2 km/hr.","Stand tall and avoid holding the rails."],"Incline 6-8%, speed 4.5-5.2 km/hr.","Treadmill"]]},
+{t:"Day 2",n:"Upper Body A: push and pull",cd:"U",ex:[
+["Seated machine chest press","3 x 10-12",["Set the seat so the handles are at mid-chest.","Press forward until arms are nearly straight.","Return slowly."],"Keep shoulder blades pinned to the pad.","Chest press machine (push-up substitute)"],
+["Wide-grip lat pulldown","3 x 10-12",["Grip the bar wider than shoulders and lock thighs under the pad.","Lean back slightly and pull the bar to your upper chest.","Let it rise slowly with straight arms."],"Drive your elbows down.","Lat pulldown station (pull-up substitute)"],
+["Seated dumbbell shoulder press","3 x 10-12",["Set the bench to 80° and sit with your back supported.","Start the dumbbells at ear level.","Press overhead, then lower with control."],"Do not arch your lower back.","Adjustable bench, dumbbells"],
+["Seated cable row","3 x 12",["Sit tall with a slight knee bend.","Pull the V-handle to your lower ribs.","Squeeze shoulder blades, then extend slowly."],"Squeeze shoulder blades together.","Seated row machine"],
+["Cable triceps pushdown","3 x 12-15",["Stand facing the high pulley, elbows at your ribs.","Push the rope or bar down until arms are straight.","Let it rise slowly."],"Only your forearms move.","High pulley cable, rope or bar"],
+["Dead bug","3 x 10 per side",["Lie on your back, arms up, knees bent at 90°.","Lower the opposite arm and leg towards the floor.","Return and switch sides."],"Keep your lower back flat on the mat.","Exercise mat"],
+["Cardio finisher: elliptical","15 min",["Set a moderate resistance.","Keep a brisk pace.","Stay upright with relaxed shoulders."],"Moderate resistance, brisk pace.","Elliptical or cross-trainer"]]},
+{t:"Day 3",n:"Lower Body B: glutes, hamstrings and calves",cd:"L",ex:[
+["Hip thrust","3 x 10-12",["Rest your upper back on a bench with the bar or machine pad across your hips.","Drive your hips up until your body is level.","Hold the squeeze for 2 seconds, then lower."],"Tuck chin and keep shins vertical at the top.","Hip thrust machine, Smith machine or bench"],
+["Static dumbbell reverse lunge","3 x 10 per leg",["Stand tall with light dumbbells or bodyweight.","Step back and lower until both knees are at 90°.","Push through the front heel to return."],"Push through the front heel.","Light dumbbells"],
+["Seated or lying leg curl","3 x 12",["Set the pad just above your heels.","Curl your heels towards your glutes.","Take 2 seconds to lower."],"Keep hips pressed into the pad.","Leg curl machine"],
+["Seated hip adduction","3 x 15",["Sit upright with pads inside your knees.","Squeeze your legs together.","Open slowly without slamming the weights."],"Targets inner thighs.","Adductor machine"],
+["Seated or standing calf raise","3 x 15",["Place the balls of your feet on the pad or step.","Lower for a full stretch.","Drive up high onto your toes."],"Full stretch at the bottom.","Calf machine or step platform"],
+["Plank hold","3 x 30-45 sec",["Forearms under shoulders, legs straight.","Brace abs and glutes.","Hold a straight line and breathe."],"Keep your body in a straight line.","Exercise mat"],
+["Cardio finisher: spin bike","12-15 min",["Pedal 1 minute at a moderate pace.","Pedal 30 seconds fast.","Repeat the cycle."],"Alternate 1 min moderate with 30 sec fast.","Stationary spin bike"]]},
+{t:"Day 4",n:"Upper Body B, core and conditioning",cd:"U",ex:[
+["Incline dumbbell chest press","3 x 10-12",["Set the bench to 30° and hold the dumbbells at your upper chest.","Press up and slightly together.","Lower with elbows at 45°."],"Elbows at a 45° angle.","Incline bench, dumbbells"],
+["One-arm dumbbell row","3 x 10-12 per side",["Support one knee and hand on a flat bench.","Pull the dumbbell towards your hip.","Lower until the arm is straight."],"Pull towards your hip.","Flat bench, dumbbell"],
+["Rear delt fly","3 x 12-15",["Sit facing the pad of the pec deck or rear delt machine.","Sweep your arms backward with a soft elbow bend.","Return slowly."],"Works the upper back and posture.","Rear delt machine"],
+["Dumbbell lateral raise","3 x 12-15",["Hold light dumbbells (2.5-5 kg) at your sides.","Raise your arms out to shoulder height.","Lower slowly."],"Slight elbow bend.","Light dumbbells"],
+["Dumbbell hammer curl","2 x 12",["Hold dumbbells with palms facing each other.","Curl up without swinging.","Lower under control."],"Do not swing your torso.","Pair of dumbbells"],
+["Kneeling cable crunch or mat crunch","3 x 12-15",["Kneel at the high pulley holding the rope by your head.","Curl your ribcage towards your pelvis.","Exhale at the peak, then return."],"Exhale at the peak contraction.","High pulley rope or mat"],
+["Cardio finisher: steady state","15-20 min",["Choose the treadmill or cross-trainer.","Keep a steady pace.","Breathe evenly."],"Steady-state pace.","Treadmill or cross-trainer"]]}
+];
+const WARM=[["Pulse raiser, 3 min","Treadmill brisk walk or cross-trainer at an easy-to-moderate pace."],["Arm circles and towel/band pass-throughs","15 reps each direction."],["Cat-cow and standing torso twists","10 slow reps each."],["Leg swings","Front-to-back and side-to-side holding a machine, 12 per leg."],["Glute bridges and air squats","12 reps each."]];
+const COOL={U:[["Chest stretch","Forearm on a rack upright, gently turn away."],["Lat and upper back stretch","Hold a rack post at waist height, step back, hinge hips and let your chest sink."],["Cross-body shoulder and overhead triceps stretch","Pull one arm across your chest, then reach behind your upper back."]],L:[["Standing quad stretch","Hold a machine, pull heel to glutes, knees together."],["Figure-four glute stretch","Cross an ankle over the opposite knee and sit back."],["Hamstring and calf stretch","Prop a heel on a low bench and hinge forward, then press toes against a post."],["Child’s pose","Sit hips back onto heels with arms extended forward."]]};
+const $=s=>document.querySelector(s);
+const ld=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}};
+const ymd=d=>{const z=new Date(d);return z.getFullYear()+"-"+String(z.getMonth()+1).padStart(2,"0")+"-"+String(z.getDate()).padStart(2,"0")};
+const today=()=>ymd(new Date());
+const monday=s=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()-((d.getDay()+6)%7));return ymd(d)};
+let tab=0,sessions=ld("sessions",{}),weights=ld("weights",[]),done=ld("done",{date:today(),ids:[]});
+if(done.date!==today())done={date:today(),ids:[]};
+
+function weekStats(){
+ const c={};Object.keys(sessions).forEach(d=>{const w=monday(d);c[w]=(c[w]||0)+1});
+ let w=monday(today()),streak=0;const cur=c[w]||0;
+ if(cur<3){const d=new Date(w+"T12:00:00");d.setDate(d.getDate()-7);w=ymd(d)}
+ while((c[w]||0)>=3){streak++;const d=new Date(w+"T12:00:00");d.setDate(d.getDate()-7);w=ymd(d)}
+ return{cur,streak,total:Object.keys(sessions).length}
+}
+function renderStats(){
+ const s=weekStats();
+ $("#stats").innerHTML=`<div class="stat"><b>${s.cur}/4</b><span>this week</span></div><div class="stat"><b>${s.streak}</b><span>week streak (3+ gym days)</span></div><div class="stat"><b>${s.total}</b><span>total sessions</span></div>`;
+}
+function renderTabs(){
+ const items=DAYS.map((d,i)=>[i,d.t]).concat([["i","Plan"],["p","Progress"]]);
+ $("#tabs").innerHTML=items.map(([k,l])=>`<button class="tab" role="tab" aria-selected="${tab===k}" data-t="${k}">${l}</button>`).join("");
+ document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{tab=isNaN(b.dataset.t)?b.dataset.t:+b.dataset.t;render()});
+}
+function mini(title,list){
+ return `<details class="card"><summary><span class="nm">${title}</span><span class="st">${list.length} moves</span></summary><div class="body"><ul class="mini">${list.map(x=>`<li><b>${x[0]}.</b> ${x[1]}</li>`).join("")}</ul></div></details>`;
+}
+function renderDay(){
+ const d=DAYS[tab],imgs=ld("imgs",{});
+ const ex=d.ex.map((e,i)=>{
+  const id="d"+tab+"e"+i,ok=done.ids.includes(id),im=imgs[id];
+  return `<details class="card"><summary><input class="chk" type="checkbox" aria-label="Mark ${e[0]} done" data-c="${id}" ${ok?"checked":""}><span class="nm">${e[0]}</span><span class="st">${e[1]}</span></summary>
+  <div class="body"><ol>${e[2].map(s=>`<li>${s}</li>`).join("")}</ol>${e[4]?`<p class="sub" style="margin:8px 0 0">Equipment: ${e[4]}</p>`:""}${e[3]?`<div class="tip">${e[3]}</div>`:""}
+  <div class="media">${im?`<img src="${im}" alt="${e[0]} demo">`:""}</div>
+  <label class="btn" style="display:inline-block"><input type="file" accept="image/*" hidden data-i="${id}">${im?"Change image or GIF":"Add image or GIF"}</label>${im?`<button class="btn" data-r="${id}">Remove</button>`:""}</div></details>`}).join("");
+ const logged=!!sessions[today()];
+ $("#view").innerHTML=`<h2>${d.t}: ${d.n}</h2>${mini("Warm-up, 7-8 min",WARM)}${ex}${mini("Cool-down, hold each 25-30 sec",COOL[d.cd])}
+ <p class="sub">Rest 60-90 sec for upper body and cables, 90-120 sec for leg machines. Pick a weight where the last 2 reps are tough with strict form.</p>
+ <button class="btn big ${logged?"done":"fill"}" id="fin">${logged?"Today’s workout logged. Tap to undo":"Finish today’s workout"}</button>`;
+ document.querySelectorAll("[data-c]").forEach(c=>{c.onclick=e=>e.stopPropagation();c.onchange=()=>{done.ids=c.checked?[...new Set([...done.ids,c.dataset.c])]:done.ids.filter(x=>x!==c.dataset.c);sv("done",done)}});
+ document.querySelectorAll("[data-i]").forEach(f=>f.onchange=()=>addImg(f));
+ document.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const m=ld("imgs",{});delete m[b.dataset.r];sv("imgs",m);render()});
+ $("#fin").onclick=()=>{if(sessions[today()])delete sessions[today()];else sessions[today()]=d.t;sv("sessions",sessions);render()};
+}
+function addImg(f){
+ const file=f.files[0];if(!file)return;
+ const id=f.dataset.i,rd=new FileReader();
+ rd.onload=()=>{
+  const save=u=>{const m=ld("imgs",{});m[id]=u;if(!sv("imgs",m)){alert("This file is too large to store. Try a smaller image or GIF (under about 2 MB).");return}render();const el=document.querySelector(`[data-i="${id}"]`);if(el)el.closest("details").open=true};
+  if(file.type==="image/gif"){save(rd.result);return}
+  const im=new Image();im.onload=()=>{const r=Math.min(1,700/im.width),c=document.createElement("canvas");c.width=im.width*r;c.height=im.height*r;c.getContext("2d").drawImage(im,0,0,c.width,c.height);save(c.toDataURL("image/jpeg",.8))};im.src=rd.result};
+ rd.readAsDataURL(file);
+}
+function chart(){
+ if(weights.length<2)return `<p class="sub">Add two or more weigh-ins to see your trend.</p>`;
+ const v=weights.map(w=>w.kg),mn=Math.min(...v)-.5,mx=Math.max(...v)+.5,n=v.length;
+ const pts=v.map((y,i)=>[20+i*(260/(n-1)),10+100*(1-(y-mn)/(mx-mn))]);
+ return `<svg viewBox="0 0 300 130" role="img" aria-label="Weight trend"><polyline fill="none" stroke="var(--ac)" stroke-width="3" points="${pts.map(p=>p.join(",")).join(" ")}"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--ac)"/>`).join("")}<text x="2" y="14" font-size="10" fill="var(--mut)">${mx.toFixed(1)}</text><text x="2" y="118" font-size="10" fill="var(--mut)">${mn.toFixed(1)}</text></svg>`;
+}
+function renderProgress(){
+ const last=weights[weights.length-1],first=weights[0];
+ const delta=last&&first?(last.kg-first.kg):0,bmi=last?(last.kg/(1.64*1.64)).toFixed(1):"-";
+ let g="";const t=new Date();t.setHours(12);const start=new Date(monday(ymd(t))+"T12:00:00");start.setDate(start.getDate()-21);
+ for(let i=0;i<28;i++){const d=new Date(start);d.setDate(start.getDate()+i);const k=ymd(d);g+=`<div class="dot ${sessions[k]?"on":""} ${k===today()?"today":""}" title="${k}">${d.getDate()}</div>`}
+ $("#view").innerHTML=`<h2>Weight</h2>
+ <div class="row"><input type="number" id="kg" step="0.1" min="30" max="250" placeholder="Weight in kg" aria-label="Weight in kg"><input type="date" id="wd" value="${today()}" aria-label="Date"><button class="btn fill" id="addw">Save weight</button></div>
+ ${last?`<p class="sub">Latest ${last.kg} kg. Change since first entry: ${delta>0?"+":""}${delta.toFixed(1)} kg. BMI ${bmi}.</p>`:`<p class="sub">Log your first weigh-in to start the chart.</p>`}
+ ${chart()}
+ <div>${weights.slice().reverse().slice(0,8).map(w=>`<div class="log"><span>${w.d}</span><span>${w.kg} kg <button data-w="${w.d}" aria-label="Delete entry ${w.d}">Delete</button></span></div>`).join("")}</div>
+ <h2>Gym days, last 4 weeks</h2><div class="dots">${g}</div>
+ <p class="sub">Weeks start on Monday. A week counts towards your streak with 3 or more gym days.</p>`;
+ $("#addw").onclick=()=>{const kg=parseFloat($("#kg").value),d=$("#wd").value;if(!kg||!d)return;weights=weights.filter(w=>w.d!==d).concat({d,kg}).sort((a,b)=>a.d.localeCompare(b.d));sv("weights",weights);render()};
+ document.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{weights=weights.filter(w=>w.d!==b.dataset.w);sv("weights",weights);render()});
+}
+function renderPlan(){
+ const L=a=>`<ul class="mini">${a.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+ $("#view").innerHTML=`<h2>Weekly schedule</h2>
+ <details class="card" open><summary><span class="nm">Option A: 4-day split (ideal)</span></summary><div class="body">${L(["Mon: Day 1, Lower Body A","Tue: Day 2, Upper Body A","Wed: Rest or brisk walk","Thu: Day 3, Lower Body B","Fri: Day 4, Upper Body B and core","Sat: Rest or active recovery","Sun: Rest"])}</div></details>
+ <details class="card"><summary><span class="nm">Option B: 3-day rolling split</span></summary><div class="body">${L(["Mon: Day 1, Lower Body A","Wed: Day 2, Upper Body A","Fri: Day 3, Lower Body B","Next Mon: Day 4, Upper Body B, then repeat the cycle"])}</div></details>
+ <h2>Daily fat-loss guidelines</h2>
+ <div class="card"><div class="body">${L(["Progressive overload: once you hit 12 reps on all 3 sets easily for two weeks in a row, add 1-2 kg on dumbbells or 1 pin on machines.","Steps: 7,500 to 9,000 per day outside the gym.","Nutrition: about 1,500-1,650 kcal a day with 85-100 g protein."])}</div></div>`;
+}
+function render(){renderStats();renderTabs();tab==="p"?renderProgress():tab==="i"?renderPlan():renderDay()}
+render();
+</script>
+</body>
+</html>
